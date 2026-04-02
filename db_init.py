@@ -19,7 +19,7 @@ monstres = [
    { "name" : "Thirvaan", "ATK": 18, "DEF": 10, "PV": 100},
    { "name" : "Bruthenkar", "ATK": 22, "DEF": 12, "PV": 150},
    { "name" : "Malavreth", "ATK": 28, "DEF": 18, "PV": 180},
-   { "name" : "Sylvakra", "ATK": 15, "DEF": 7, "PV": 90 }
+   { "name" : "Sylvakra", "ATK": 15, "DEF": 7, "PV": 90}
 ]
 
 
