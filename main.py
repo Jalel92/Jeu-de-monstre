@@ -41,7 +41,8 @@ def demander_pseudo():
 def nouvelle_partie():
     pseudo = demander_pseudo()
     equipe = creer_equipe()
-    #score = combattre(equipe)
+    score = combattre(equipe)
+    print(score)
     # afficher_score(score)
     # enregistrer_score(pseudo,score)
 
@@ -54,7 +55,7 @@ def main() :
         nouvelle_partie()
     elif choix_joueur == 2 : #Option 2  : Affiche les 3 meilleurs scores
         pass
-    else : #Option 3 : Quitter
+    else :#Option 3 : Quitter
         print("À bientot !")
         os.system('cls' if os.name == 'nt' else 'clear')
 

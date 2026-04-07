@@ -1,22 +1,57 @@
 import random
 from utils import afficher_header_100
 from db_init import personnages,monstres
-from main import *
 
-def en_vie(pv) :
-    if pv > 0 :
+def en_vie(perso) :
+    if perso['PV'] > 0 :
         return True
     return False
- 
-def combattre(equipe) :
-    #choisir un monstre
+
+def choix_monstre() : #ne pas oublier de changer la fonction pour ne pas tomber sur des monstres morts
     monstre = random.choice(monstres)
-    afficher_header_100(f"Vague 1 : L'équipe affrontera le monstre {monstre['name']} (⚔️  ATK : {monstre['ATK']} | 🛡️  DEF : {monstre['DEF']} | ❤️  PV : {monstre['PV']})")
-    #equipe attaque monstre
+    return monstre
+
+def equipe_en_vie(equipe) :
+    c = 0
+    for character in equipe :
+        if en_vie(character) :
+             c += 1
+    return c == len(equipe)
+
+
+def monstre_attack(monstre,equipe) :
+    cible = random.choice(equipe)
+    print(f"{monstre['name']} attaque {cible['name']} !")
+    cible['PV'] = cible['PV'] - monstre['ATK']
+    if cible['PV'] <= 0 :
+        print(f"{cible['name']} est MORT !") 
+        equipe.remove(cible)
+
+
+def team_attack(equipe,monstre) :
     for i in range(len(equipe)) :
         attaquant = equipe[i]
-        print(f"{attaquant['name']} attaque {monstre['name']} !")
-        monstre['PV'] = monstre['PV'] - attaquant['ATK']
+        if en_vie(attaquant) :
+            print(f"{attaquant['name']} attaque {monstre['name']} !")
+            monstre['PV'] = monstre['PV'] - attaquant['ATK']
+            print(f"{monstre['name']} n'a plus que {monstre['PV']} !")
+         
+
+def combattre(equipe) :
+    #choisir un monstre
+    monstre = choix_monstre()
+    vague = 1
+    while equipe_en_vie(equipe) : #tant que equipe n'est pas mort
+        if en_vie(monstre) :#si monstre vivant :
+                team_attack(equipe,monstre) #l'équipe attack le monstre
+                if en_vie(monstre) : #si le monstre est encore vivant
+                        monstre_attack(monstre,equipe) #le monstre attaque l'équipe
+                elif not en_vie(monstre) : #si monstre mort :
+                    monstre = choix_monstre()
+                    vague += 1
+                    afficher_header_100(f"Vague {vague} : L'équipe affrontera le monstre {monstre['name']} (⚔️  ATK : {monstre['ATK']} | 🛡️  DEF : {monstre['DEF']} | ❤️  PV : {monstre['PV']})")
+
+    return vague
 
 
 
