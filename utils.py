@@ -7,3 +7,4 @@ def afficher_header_100(texte: str) :
     print("-"*100)
     print(texte.center(100))
     print("-"*100)
+

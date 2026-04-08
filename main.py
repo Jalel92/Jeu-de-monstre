@@ -1,5 +1,5 @@
 import os
-from db_init import personnages, monstres
+from db_init import *
 import random
 from utils import *
 from game import *
@@ -38,13 +38,24 @@ def demander_pseudo():
     #Renvoyer le pseudo
     return pseudo
 
+def enregistrer_score(pseudo,score) :
+    dict0 = {'pseudo' : pseudo, 'score' : score}
+    database["SCORES"].insert_one(dict0)
+
 def nouvelle_partie():
     pseudo = demander_pseudo()
     equipe = creer_equipe()
     score = combattre(equipe)
-    print(score)
-    # afficher_score(score)
-    # enregistrer_score(pseudo,score)
+    afficher_header_100(f"Tes combattans sont mort... Ils ont héroïquement vaincu {score} monstres !")
+    enregistrer_score(pseudo,score)
+
+def afficher_score() :
+    resultats = database["SCORES"].find().limit(3) 
+    c = 0
+    for doc in resultats :
+        print(f"Joueur : {doc['pseudo']}  | Score : {doc['score']} ")
+    return resultats
+
 
 def main() :
     afficher_menu()
@@ -54,7 +65,7 @@ def main() :
     elif choix_joueur == 1 : #Option 1 : Démarrer une nouvelle partie
         nouvelle_partie()
     elif choix_joueur == 2 : #Option 2  : Affiche les 3 meilleurs scores
-        pass
+        print(afficher_score())
     else :#Option 3 : Quitter
         print("À bientot !")
         os.system('cls' if os.name == 'nt' else 'clear')

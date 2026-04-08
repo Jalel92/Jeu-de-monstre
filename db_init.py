@@ -32,6 +32,7 @@ def init_db():
     collection_personnages = database["PERSONNAGES"]
     collection_scores = database["SCORES"]
 
+   #vide la base de données
     collection_personnages.drop()
     collection_monstres.drop()
     collection_scores.drop()

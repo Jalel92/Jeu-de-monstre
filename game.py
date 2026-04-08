@@ -8,7 +8,7 @@ def en_vie(perso) :
     return False
 
 def choix_monstre() : #ne pas oublier de changer la fonction pour ne pas tomber sur des monstres morts
-    monstre = random.choice(monstres)
+    monstre = random.choice(monstres).copy()
     return monstre
 
 def equipe_en_vie(equipe) :
@@ -16,12 +16,12 @@ def equipe_en_vie(equipe) :
     for character in equipe :
         if en_vie(character) :
              c += 1
-    return c == len(equipe)
-
+    return c != 0
 
 def monstre_attack(monstre,equipe) :
     cible = random.choice(equipe)
     print(f"{monstre['name']} attaque {cible['name']} !")
+    print(f"{cible['name']} n'a plus que {cible['PV']} !")
     cible['PV'] = cible['PV'] - monstre['ATK']
     if cible['PV'] <= 0 :
         print(f"{cible['name']} est MORT !") 
@@ -34,12 +34,14 @@ def team_attack(equipe,monstre) :
         if en_vie(attaquant) :
             print(f"{attaquant['name']} attaque {monstre['name']} !")
             monstre['PV'] = monstre['PV'] - attaquant['ATK']
-            print(f"{monstre['name']} n'a plus que {monstre['PV']} !")
+            if monstre['PV'] <= 0 :
+                print(f"{monstre['name']} est MORT !")
+            else : 
+                print(f"{monstre['name']} n'a plus que {monstre['PV']} !")
          
 
 def combattre(equipe) :
-    #choisir un monstre
-    monstre = choix_monstre()
+    monstre = choix_monstre()     #choisir un monstre
     vague = 1
     while equipe_en_vie(equipe) : #tant que equipe n'est pas mort
         if en_vie(monstre) :#si monstre vivant :
@@ -51,7 +53,7 @@ def combattre(equipe) :
                     vague += 1
                     afficher_header_100(f"Vague {vague} : L'équipe affrontera le monstre {monstre['name']} (⚔️  ATK : {monstre['ATK']} | 🛡️  DEF : {monstre['DEF']} | ❤️  PV : {monstre['PV']})")
 
-    return vague
+    return str(vague)
 
 
 
